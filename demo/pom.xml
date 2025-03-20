@@ -65,6 +65,28 @@
 			<version>3.21.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.0.Final</version> <!-- Используйте актуальную версию -->
+		</dependency>
+
+		<!-- Для использования JSR-303/JSR-380 и поддержки @Valid -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- Mockito for mocking (если необходимо) -->
 		<dependency>
