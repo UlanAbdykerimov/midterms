@@ -1,35 +1,51 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.OrderRequestDTO;
-import com.example.demo.dto.OrderResponseDTO;
 import com.example.demo.entity.Order;
-import com.example.demo.mapper.OrderMapper;
+import com.example.demo.entity.OrderStatus;
 import com.example.demo.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
-    private final OrderMapper orderMapper;
+    private final OrderRepository orderRepository;
 
-    public OrderService(OrderMapper orderMapper) {
-        this.orderMapper = orderMapper;
+    // Create a new order
+    public Order createOrder(Order order) {
+        order.setStatus(OrderStatus.PENDING); // Set initial status as PENDING
+        return orderRepository.save(order);
     }
 
-    public OrderResponseDTO getOrder(Long orderId) {
-        // Получаем заказ из базы данных
-        Order order = OrderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
-
-        // Маппим сущность в DTO
-        return orderMapper.orderToOrderResponseDTO(order);
+    // Get order by ID
+    public Optional<Order> getOrderById(Long id) {
+        return orderRepository.findById(id);
     }
 
-    public Order createOrder(OrderRequestDTO orderRequestDTO) {
-        // Маппим DTO в сущность
-        Order order = orderMapper.orderRequestDTOToOrder(orderRequestDTO);
+    // Get all orders
+    public Iterable<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
 
-        // Сохраняем заказ
-        return OrderRepository.save(order);
+    // Update order status
+    public Order updateOrderStatus(Long orderId, OrderStatus status) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            order.setStatus(status);
+            return orderRepository.save(order);
+        }
+        return null;
+    }
+
+    // Cancel order by ID
+    public void cancelOrder(Long orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isPresent() && order.get().getStatus() == OrderStatus.PENDING) {
+            orderRepository.deleteById(orderId);
+        }
     }
 }
-

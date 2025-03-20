@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +40,7 @@ class VoteRepositoryTest {
         Vote vote = new Vote(null, user, menuItem, LocalDateTime.now());
         voteRepository.save(vote);
 
-        Optional<Vote> foundVote = voteRepository.findByUserAndMenuItem(user, menuItem);
+        Optional<Vote> foundVote = voteRepository.findByUserIdAndMenuItemId(user, menuItem);
         assertThat(foundVote).isPresent();
     }
 
@@ -57,12 +58,12 @@ class VoteRepositoryTest {
         user2.setEmail("user2@alatoo.edu.kg");
         userRepository.save(user2);
 
-        voteRepository.saveAll(List.of(
+        voteRepository.saveAll(Arrays.asList(
                 new Vote(null, user1, menuItem, LocalDateTime.now()),
                 new Vote(null, user2, menuItem, LocalDateTime.now())
         ));
 
-        List<Vote> votes = voteRepository.findByMenuItem(menuItem);
+        List<Vote> votes = voteRepository.findByMenuItemId(menuItem);
         assertThat(votes).hasSize(2);
     }
 }
