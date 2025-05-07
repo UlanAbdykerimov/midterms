@@ -29,10 +29,12 @@ public class EmailVerificationService {
                 .filter(t -> t.getExpiryDate().isAfter(Instant.now()))
                 .map(t -> {
                     User user = t.getUser();
-                    user.setEmailVerified(true);
+                    user.setEmailVerified(true); // <- помечаем как подтверждённый
                     tokenRepository.delete(t);
                     return true;
-                }).orElse(false);
+                })
+                .orElse(false);
     }
+
 }
 

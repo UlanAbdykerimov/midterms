@@ -52,10 +52,11 @@ public class AuthController {
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
         boolean result = emailVerificationService.verifyToken(token);
         if (result) {
-            return ResponseEntity.ok("Email подтверждён!");
+            return ResponseEntity.ok("Email успешно подтвержден!");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Неверный или просроченный токен");
+            return ResponseEntity.badRequest().body("Неверный или просроченный токен.");
         }
     }
+
 
 }
