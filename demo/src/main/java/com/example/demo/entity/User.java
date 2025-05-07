@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -45,11 +46,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
-    // ----------- Реализация методов UserDetails -----------
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> role.name()); // или использовать SimpleGrantedAuthority
+        return List.of(() -> role.name());
     }
 
     @Override
@@ -76,4 +75,16 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
+    public User(String name, String surname, String email, String password, Role role) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
 }
